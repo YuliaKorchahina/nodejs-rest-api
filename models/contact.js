@@ -15,7 +15,12 @@ const contactsSchema = new Schema({
     type: Boolean,
     default: false
   }
-});
+}, {versionKey: false, timestamps: true});
+
+contactsSchema.post('save', (er, data, next)=>{
+    er.status = 400;
+    next()
+})
 
 const Contact = model("contact", contactsSchema);
 
