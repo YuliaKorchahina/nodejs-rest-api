@@ -1,58 +1,37 @@
-const Joi = require("joi");
-
-const { HttpError } = require("../helpers/HttpError");
-
-const contactsService = require("../models/contacts");
-
+const { HttpError } = require("../helpers");
+const { Contact } = require("../models/contact");
 const { ctrlWrapper } = require("../decorators");
 
-const addValidationSchema = Joi.object({
-  name: Joi.string().min(2).required(),
-  email: Joi.string().trim().email().required(),
-  phone: Joi.string().required()
-});
-
 const getAllContacts = async (req, res) => {
-  const result = await contactsService.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
-
 const getContactById = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.getContactById(id);
+  const result = await Contact.findById(id);
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, "Not Found");
   }
   res.json(result);
 };
 
 const addContact = async (req, res) => {
-  const { error } = addValidationSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, "missing required name field");
-  }
-  const result = await contactsService.addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
 const removeContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.removeContact(id);
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, "Not Found");
   }
-  res.status(200).json({
-    message: "contact deleted"
-  });
+  res.status(200).json(result);
 };
 
 const updateContactById = async (req, res) => {
-  const { error } = addValidationSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, "missing fields");
-  }
   const { id } = req.params;
-  const result = await contactsService.updateContact(id, req.body);
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
   if (!result) {
     throw HttpError(404, "Not Found");
   }
@@ -64,5 +43,5 @@ module.exports = {
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
-  updateContactById: ctrlWrapper(updateContactById),
+  updateContactById: ctrlWrapper(updateContactById)
 };

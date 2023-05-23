@@ -1,29 +1,47 @@
 const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+const { handleMongooseEr } = require("../helpers");
 
-const contactsSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"]
-  },
-  email: {
-    type: String
-  },
-  phone: {
-    type: String
-  },
-  favorite: {
-    type: Boolean,
-    default: false
-  }
-}, {versionKey: false, timestamps: true});
+const addValidationSchema = Joi.object({
+  name: Joi.string().min(2).required(),
+  email: Joi.string().trim().email().required(),
+  phone: Joi.string().required()
+});
 
-contactsSchema.post('save', (er, data, next)=>{
-    er.status = 400;
-    next()
-})
+const isFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required()
+});
+
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"]
+    },
+    email: {
+      type: String
+    },
+    phone: {
+      type: String
+    },
+    favorite: {
+      type: Boolean,
+      default: false
+    }
+  },
+  { versionKey: false }
+);
+
+contactsSchema.post("save", handleMongooseEr);
 
 const Contact = model("contact", contactsSchema);
 
+const schemas = {
+  addValidationSchema,
+  isFavoriteSchema
+};
+
 module.exports = {
-  Contact
+  Contact,
+  schemas
 };
