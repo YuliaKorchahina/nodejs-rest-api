@@ -1,8 +1,8 @@
 const  HttpError  = require("./HttpError");
-const handleMongooseEr = require("./handleMongooseEr");
+const handleMongooseError = require("./handleMongooseError");
 const validateBody = require('./validateBody')
 module.exports = {
   HttpError,
-  handleMongooseEr,
+  handleMongooseError,
   validateBody
 };
