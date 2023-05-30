@@ -15,13 +15,16 @@ const userSchema = new Schema(
       required: [true, "Email is required"],
       unique: true,
       match: emailRegexp
-    }
+    },
     //   subscription: {
     //     type: String,
     //     enum: ["starter", "pro", "business"],
     //     default: "starter"
     //   },
-    //   token: String
+    token: {
+      type: String,
+      default: null,
+  }
   },
   { versionKey: false }
 );

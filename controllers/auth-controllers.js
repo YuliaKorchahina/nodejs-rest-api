@@ -42,9 +42,12 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "20h" });
 
+  console.log(token);
+
   res.json({
     token,
-  })
+  });
+  await User.findByIdAndUpdate(user._id, { token });
 };
 
 module.exports = {
