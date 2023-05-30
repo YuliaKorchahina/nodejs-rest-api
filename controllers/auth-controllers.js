@@ -1,12 +1,12 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require('dotenv').config();
+require("dotenv").config();
 const { User } = require("../models/user");
 const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../decorators");
 
 const { SECRET_KEY } = process.env;
-console.log(SECRET_KEY);
+
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -20,8 +20,8 @@ const register = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    email: newUser.email
-    // name: newUser.name
+    email: newUser.email,
+    password: newUser.password
   });
 };
 
@@ -42,15 +42,25 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "20h" });
 
-  console.log(token);
-
-  res.json({
-    token,
-  });
   await User.findByIdAndUpdate(user._id, { token });
+
+  res.json({ token });
+};
+
+const getCurrent = async (req, res) => {
+  const { email } = req.user;
+   res.json({ email });
+};
+
+const logout = async (req, res) => {
+  const { _id: id } = req.user;
+  await User.findByIdAndUpdate(id, { token: "null" });
+  res.status(204).json("Logout success");
 };
 
 module.exports = {
   register: ctrlWrapper(register),
-  login: ctrlWrapper(login)
+  login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout)
 };
