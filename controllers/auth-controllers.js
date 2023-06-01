@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const gravatar = require("gravatar");
+
+// require("dotenv").config();
 const { User } = require("../models/user");
 const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../decorators");
@@ -16,8 +18,13 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL
+  });
 
   res.status(201).json({
     email: newUser.email,
@@ -49,7 +56,7 @@ const login = async (req, res) => {
 
 const getCurrent = async (req, res) => {
   const { email } = req.user;
-   res.json({ email });
+  res.json({ email });
 };
 
 const logout = async (req, res) => {
