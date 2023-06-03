@@ -2,12 +2,15 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 
-// require("dotenv").config();
+
+require("dotenv").config();
 const { User } = require("../models/user");
 const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../decorators");
 
 const { SECRET_KEY } = process.env;
+
+
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -65,9 +68,12 @@ const logout = async (req, res) => {
   res.status(204).json("Logout success");
 };
 
+
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
-  logout: ctrlWrapper(logout)
+  logout: ctrlWrapper(logout),
+ 
 };
