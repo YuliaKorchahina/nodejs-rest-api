@@ -1,4 +1,4 @@
-const {HttpError}= require("../helpers")
+// const {HttpError}= require("../helpers")
 
 const multer = require("multer");
 const path = require("path");
@@ -20,19 +20,19 @@ const limits = {
   fileSize: 1024 * 1024
 }
 
-const fileFilter = (req, file, cb) => {
-  const { mimetype } = file;
-  console.log(mimetype)
-  if (mimetype !== "image/jpeg" || mimetype !== "image/png") {
-      cb(HttpError(400, "File can have only .jpg or .png extension"), false)
-  }
-  cb(null, true);
-}
+// const fileFilter = (req, file, cb) => {
+//   const { mimetype } = file;
+//   console.log(mimetype)
+//   if (mimetype !== "image/jpeg" || mimetype !== "image/png") {
+//       cb(HttpError(400, "File can have only .jpg or .png extension"), false)
+//   }
+//   cb(null, true);
+// }
 
 const upload = multer({
   storage,
   limits,
-  fileFilter
+  // fileFilter
 });
 
 module.exports = upload;

@@ -2,9 +2,7 @@ const express = require("express");
 
 const { authentificate } = require("../../middlewares");
 const ctrlWrapper = require("../../controllers/contacts-controllers");
-const { isValidId,
-   upload
-   } = require("../../middlewares");
+const { isValidId } = require("../../middlewares");
 const { validateBody } = require("../../helpers");
 const { schemas } = require("../../models/contact");
 
@@ -15,9 +13,8 @@ router.get("/", authentificate, ctrlWrapper.getAllContacts);
 router.get("/:id", authentificate, isValidId, ctrlWrapper.getContactById);
 
 router.post(
-  "/", 
-  upload.single("avatar"),
-  // authentificate,
+  "/",
+  authentificate,
   validateBody(schemas.addValidationSchema),
   ctrlWrapper.addContact
 );
@@ -39,9 +36,5 @@ router.patch(
   isValidId,
   ctrlWrapper.updateContactById
 );
-
-// router.patch("/avatars", authentificate, upload.single("avatar"),
-//   ctrlWrapper.updateAvatar
-// );
 
 module.exports = router;
