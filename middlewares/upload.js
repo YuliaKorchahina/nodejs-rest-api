@@ -3,7 +3,6 @@
 const multer = require("multer");
 const path = require("path");
 
-// const tempDir = path.join(__dirname, '../', "temp");
 const tempDir = path.resolve("temp");
 
 const storage = multer.diskStorage({
@@ -14,11 +13,7 @@ const storage = multer.diskStorage({
     cb(null, newName);
   }
 });
-
-
-const limits = {
-  fileSize: 1024 * 1024
-}
+console.log(storage);
 
 // const fileFilter = (req, file, cb) => {
 //   const { mimetype } = file;
@@ -30,8 +25,7 @@ const limits = {
 // }
 
 const upload = multer({
-  storage,
-  limits,
+  storage
   // fileFilter
 });
 
