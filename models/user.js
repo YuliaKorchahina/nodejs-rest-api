@@ -24,6 +24,10 @@ const userSchema = new Schema(
     token: {
       type: String,
       default: null
+    },
+    avatarURL:{
+      type: String,
+      required: true
     }
   },
   { versionKey: false }
@@ -32,7 +36,6 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  // name: Joi.string().min(2).required(),
   email: Joi.string().trim().pattern(emailRegexp).required(),
   password: Joi.string().required()
 });
