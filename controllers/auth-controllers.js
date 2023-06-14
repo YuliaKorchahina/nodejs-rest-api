@@ -87,9 +87,13 @@ const verify = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  if (!user || !user.verify) {
+  if (!user) {
     throw HttpError(401, "Email or passwoord invalid");
   }
+if( !user.verify){
+  throw HttpError(400, "Verification has already been passed");
+}
+
   const comparePassword = await bcrypt.compare(password, user.password);
   if (!comparePassword) {
     throw HttpError(401, "Email or passwoord invalid");
