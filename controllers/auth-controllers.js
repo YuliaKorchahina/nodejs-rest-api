@@ -91,7 +91,7 @@ const login = async (req, res) => {
     throw HttpError(401, "Email or passwoord invalid");
   }
 if( !user.verify){
-  throw HttpError(400, "Verification has already been passed");
+  throw HttpError(400, "Verification not passed");
 }
 
   const comparePassword = await bcrypt.compare(password, user.password);
