@@ -19,6 +19,9 @@ router.post("/login", validateBody(schemas.loginSchema), ctrlWrapper.login);
 
 router.get("/users/current", authentificate, ctrlWrapper.getCurrent);
 
+router.get("/verify/:verificationToken", ctrlWrapper.verify)
+router.post('/verify', validateBody(schemas.userEmailSchema), ctrlWrapper.resendVerifyMail )
+
 router.post("/logout", authentificate, ctrlWrapper.logout);
 
 router.patch(
@@ -27,4 +30,6 @@ router.patch(
   upload.single("avatar"),
   ctrlWrapper.updateAvatar
 );
+
+
 module.exports = router;
